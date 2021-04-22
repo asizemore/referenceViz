@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" href="../style/keyword_nets.css">
+</head>
+
+<body style="background-color:#180F1A">
+    <div id="title-div">
+
+    </div>
+
+    <div id="author-input-div" style="padding-bottom: 20px">
+        <h3>Enter an author</h3>
+        <input type="text" id="keyword-input" name="name" minlength="4" maxlength="20" size="10" placeholder="keyword">
+        <button id="keyword-submit">Submit</button>
+    </div>
+
+    <div id="content-div">
+
+        <div id="svg-div">
+            <svg height="700" width="700"></svg>
+        </div>
+
+        <div id="info-div-container">
+            <div id="info-div">
+            </div>
+        </div>
+    </div>
+
+    <div id="description-div-container">
+        <div id="description-div">
+            Enter an author to see keywords referenced by that author. In the network shown, nodes correspond to keywords and edges link keywords if both keywords appear in the same file.
+            Node size indicates the frequency of the keyword used in references. 
+            Click on a node to learn more.
+            Edge opacity indicates strength of connection (number of shared references).
+           
+        </div>
+    </div>
+
+    <!-- <div id="extras">
+        <button id="reset">Reset all</button>
+    </div> -->
+
+
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="../js/author_net.js"></script>
+
+
+
+
+</body>

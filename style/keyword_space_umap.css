@@ -1,0 +1,180 @@
+h1 {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: lighter;
+    color: white;
+    font-size: 45px;
+    text-align: left;
+}
+
+h3 {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: lighter;
+    color: white;
+    font-size: 25px;
+    vertical-align: middle;
+    display: inline;
+}
+
+h4 {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    color: white;
+    font-weight: lighter;
+    font-size: 20px;
+    margin: 0px auto;
+}
+
+text {
+    color: white;
+    font-size: 16px;
+}
+
+div {
+font-family: "Helvetica Neue", Helvetica, sans-serif;
+font-weight: lighter;
+color: gray;
+font-size: 14px;
+padding: 10px;
+}
+
+a {
+    color: gray;
+    font-style: italic;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #9DC7B8;
+}
+
+input {
+    vertical-align: middle;
+    display: inline;
+}
+
+
+button {
+background-color: #180F1A;
+border:0.1em solid white;
+padding:0.15em 1.2em;
+/* margin:0 0.1em 0.1em 0; */
+border-radius:0.12em;
+box-sizing: border-box;
+color: white;
+transition: all 0.2s;
+font-family: "Helvetica Neue", Helvetica, sans-serif;
+font-weight: 300;
+font-size: 16px;
+vertical-align: middle;
+display: inline;
+}
+
+button:hover {
+color:white;
+background-color:#5E3B66;
+
+}
+
+#content-div {
+    float: left;
+    margin: auto;
+    clear: left;
+    width: 100%;
+    text-align: center;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+#svg-div {
+    display: inline-block;
+    margin: auto;
+}
+
+#info-div-container {
+    display: inline-block;
+    text-align: center;
+    margin: auto;
+    padding-top: 20px;
+    /* height: 600px; */
+    vertical-align: top;
+
+}
+
+#info-div {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  /* display: block; */
+  font-weight: 300;
+  /* float: right; */
+  color: white;
+  /* vertical-align: middle; */
+  margin-left: auto;
+  /* margin-right: 0; */
+  text-align: left;
+  line-height: 20px;
+  width: 450px;
+  overflow-y: scroll;
+  overflow-x: visible;
+  height: 550px;
+
+}
+
+#description-div{
+    font-size: 30px;
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
+#description-div-container{
+    width: 100%;
+    float: left;
+    text-align: center;
+    margin: 0 auto;
+    color: white;
+
+}
+
+
+
+.nodes {
+    /* fill: #5E3B66; */
+    stroke: #D1BE8E;
+}
+
+
+
+.infotext {
+    color:white;
+}
+
+
+.hover-text {
+    color: #D1BE8E;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.hover-underline {
+    stroke: #D1BE8E;
+    stroke-width: 0.5px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #180F1A; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: rgb(137, 124, 139); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #B6A4BA; 
+}
