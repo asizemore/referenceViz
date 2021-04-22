@@ -5,8 +5,11 @@
 *.svg
 *.csv
 
-data/
-raw_data/
+data/*
+raw_data/*
+
+!data/.gitkeep
+!raw_data/.gitkeep
 
 d3-save-svg-gh-pages/*
 
