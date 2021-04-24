@@ -285,6 +285,15 @@ function get_filenames(str) {
     return filteredFiles;
 }
 
+// Have button listen to "enter"
+const input = document.getElementById("keyword-input");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("keyword-submit").click();
+  }
+});
+
 // // Return the node degree
 // function get_n_links(d) {
 
