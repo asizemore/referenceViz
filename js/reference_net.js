@@ -152,7 +152,7 @@ d3.csv("../data/all_filenames.csv", function(error, csv_nodes) {
          
                 // Append info to div
                     divInfo.append("text")
-                        .html("<a href=#>" + entry + "</a><br>")
+                        .html("<a href='' onclick='return false;'>" + entry + "</a><br>")
                         .attr("class", "infotext")
                         .attr("class", entry)
                         .on("click", redrawNetworkFromKeyword); // Consider using id...
@@ -202,9 +202,9 @@ d3.csv("../data/all_filenames.csv", function(error, csv_nodes) {
     }); // end submit button onclick
 
 
+    // If user clicks a keyword, update network with that keyword
     function redrawNetworkFromKeyword() {
-        console.log(d3.select(this));
-        console.log(d3.select(this).attr("class"));
+
         let selected_keyword = d3.select(this).attr("class");
         filterWords = [selected_keyword];
 
