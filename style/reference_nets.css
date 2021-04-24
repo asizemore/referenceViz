@@ -43,6 +43,10 @@ a {
 }
 
 a:hover {
+    color: #B6A4BA;
+}
+
+#reference-link:hover {
     color: #9DC7B8;
 }
 

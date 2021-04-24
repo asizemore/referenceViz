@@ -141,7 +141,7 @@ d3.csv("../data/all_filenames.csv", function(error, csv_nodes) {
             // Clear and update divInfo
             divInfo.text(null)
             divInfo.append("text")
-                .html("<h4><b> Reference:  </b> <a href=https://4banks.net/Mes-Rel/bibl.htm#" + selectedNodeData[1][1] + ">" +
+                .html("<h4><b> Reference:  </b> <a href=https://4banks.net/Mes-Rel/bibl.htm#" + selectedNodeData[1][1] + " id=reference-link>" +
                       selectedNodeData[2][1] + ", " + selectedNodeData[3][1] + "</a></h4><br><br>")
         
             // Add authors and their refs to divInfo
@@ -149,26 +149,20 @@ d3.csv("../data/all_filenames.csv", function(error, csv_nodes) {
                 .html("This work contains the following keywords:<br><br>");
 
                 selectedNodeKeywords.forEach(function(entry) {
-        
-                // // Extract the last author and year from the filename
-                // if(entry.match(/(^[A-Za-zÀ-ÖØ-öø-ÿ]+)(\d{4})/)){
-                //     let entryAuthor = entry.match(/(^[A-Za-zÀ-ÖØ-öø-ÿ]+)(\d{4})/)[1],
-                //         entryYear = entry.match(/(^[A-Za-zÀ-ÖØ-öø-ÿ]+)(\d{4})/)[2];
-        
+         
                 // Append info to div
                     divInfo.append("text")
-                        .html(entry + "<br>")
-                        .attr("class", "infotext");
+                        .html("<a href=#>" + entry + "</a><br>")
+                        .attr("class", "infotext")
+                        .attr("class", entry)
+                        .on("click", redrawNetworkFromKeyword); // Consider using id...
 
-                        // divInfo.append("text")
-                        //     .html("<a href=https://4banks.net/Mes-Rel/bibl.htm#" + entry + ">" + entryAuthor + ", " + entryYear + "</a><br>")
-                        //     .attr("class", "infotext")
-                // } // end (if entry.match...)
   
                  }); // end forEach
         
             // Finally make div visible
             divInfo.attr("opacity",1);
+
         } // end onClick
 
         
@@ -206,6 +200,31 @@ d3.csv("../data/all_filenames.csv", function(error, csv_nodes) {
                 .html("<h1> Works that mention " + filterWords[0] + "</h1>");
         } // end if keyword_input...
     }); // end submit button onclick
+
+
+    function redrawNetworkFromKeyword() {
+        console.log(d3.select(this));
+        console.log(d3.select(this).attr("class"));
+        let selected_keyword = d3.select(this).attr("class");
+        filterWords = [selected_keyword];
+
+        // Update svg
+        svg.selectAll(".nodes").remove();
+        svg.selectAll(".links").remove();
+        d3.selectAll(".hover-text").remove();
+        d3.selectAll(".hover-underline").remove();
+        divInfo.text(null);
+
+        // Restart and rerun simulation
+        simulation.alpha(0.3).restart();
+        runSimulation(filterWords, original_nodes1, original_edges1);
+
+        // Update title
+        divTitle.text(null);
+        divTitle.append("text")
+            .html("<h1> Works that mention " + filterWords[0] + "</h1>");
+
+    }
 
 
   }); // end d3.csv
