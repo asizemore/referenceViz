@@ -134,12 +134,12 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         let author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
         console.log(author1)
 
-        author1.attr("fill", "red").attr("class","author");
+        author1.attr("class","author1");
 
         // Handle mouse events
-        d3.selectAll(".nodes").on("mouseout",mouseout);
+        node.on("mouseout",mouseout);
         author1.on("mouseout", null);
-        author1.on("mouseout",author1Mouseout);
+        author1.on("mouseout",authorMouseout);
         
     })
 
@@ -154,13 +154,12 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         let author2 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
         console.log(author2)
 
-        author2.attr("fill", "green")
-            .attr("class","author");
+        author2.attr("class","author2");
 
         // Handle mouse events
-        d3.selectAll(".nodes").on("mouseout",mouseout);
+        node.on("mouseout",mouseout);
         author2.on("mouseout", null);
-        author2.on("mouseout",author1Mouseout);
+        author2.on("mouseout",authorMouseout);
         
     })
 
@@ -169,9 +168,13 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
 
 // Additional helper functions
-function author1Mouseout(d) {
+function authorMouseout(d) {
     let selectedNode = d3.select(this);
-    selectedNode.attr("fill","red");
+    selectedNode.attr("r",current_node_radius);
+
+    // Remove hover text
+    d3.selectAll(".hover-text").remove();
+    d3.selectAll(".hover-underline").remove();
 }
 
 // Handle mousover actions
