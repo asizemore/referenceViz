@@ -164,12 +164,24 @@ background-color:#5E3B66;
 .hover-text {
     color: #D1BE8E;
     font-style: italic;
-    font-size: 20px;
+    font-size: 24px;
 }
 
 .hover-underline {
     stroke: #D1BE8E;
     stroke-width: 0.5px;
+}
+
+.author1-info {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #529FCE;
+}
+
+.author2-info {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #D1BE8E;
 }
 
 

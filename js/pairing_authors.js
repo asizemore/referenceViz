@@ -128,6 +128,9 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
     // Buttons
     d3.select("#author-submit1").on("click", function() {
 
+        // Clear info
+        d3.selectAll(".author1-info").remove();
+
         // Retrieve input
         author1_input = document.getElementById('author-input1').value;
 
@@ -137,13 +140,12 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
             let author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
     
             author1.attr("class","author1");
-            console.log(author2_input)
+
     
             if(author2_input) {
                 filterWords.push(author2_input);
                 author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
     
-                console.log(author12);
                 author12.attr("class","author12");
             }
             
@@ -151,6 +153,15 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
             node.on("mouseout",mouseout);
             author1.on("mouseout", null);
             author1.on("mouseout",authorMouseout);
+
+            // Add author text
+            svg.append('text')
+                .text(author1_input)
+                .attr("class", "author1-info")
+                .attr("x", 5)
+                .attr("fill", "#529FCE")
+                .attr("y", 20)
+                .attr("text-anchor","start")
 
         } else {
             // Treat as clear
@@ -161,6 +172,9 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
     })
 
     d3.select("#author-submit2").on("click", function() {
+
+         // Clear info
+         d3.selectAll(".author2-info").remove();
 
         // Retrieve input
         author2_input = document.getElementById('author-input2').value;
@@ -183,6 +197,15 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
             node.on("mouseout",mouseout);
             author2.on("mouseout", null);
             author2.on("mouseout",authorMouseout);
+
+            // Add author text
+            svg.append('text')
+                .text(author2_input)
+                .attr("class", "author2-info")
+                .attr("x", 5)
+                .attr("fill", "#D1BE8E")
+                .attr("y", 50)
+                .attr("text-anchor","start")
 
         } else {
             // Treat as clear
@@ -216,20 +239,8 @@ function mouseover(d) {
     let selectedNode = d3.select(this);
     selectedNode.attr("r",1.5*current_node_radius);
     
-    // let x = (d3.mouse(this)[0]- zoomTrans.x)/zoomTrans.scale;
-    // let x = (d3.mouse(this)[0] - zoomTrans.x)/zoomTrans.scale;
-    let x = selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x
-    console.log(d3.event.x)
-    // let y = (d3.mouse(this)[1]- zoomTrans.y)/zoomTrans.scale;
-    let y = selectedNode.attr("cy")*zoomTrans.scale + zoomTrans.y
-    // console.log(d3.event.pageX)
-
-    var xy = d3.mouse(this);
-  
-    var transform = d3.zoomTransform(svg);
-    var xy1 = transform.invert(xy);
-    console.log(selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x)
-    console.log(zoomTrans);
+    let x = selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x + 5;
+    let y = selectedNode.attr("cy")*zoomTrans.scale + zoomTrans.y - 5;
 
     let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
 
@@ -253,7 +264,6 @@ function mouseout(d) {
 
     // Extract data
     let selectedNode = d3.select(this);
-    // selectedNode.attr("fill", "#5E3B66");
     selectedNode.attr("r", current_node_radius)
 
     // Remove hover text
@@ -282,10 +292,8 @@ function zoomed() {
 
 
     d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
-    // d3.selectAll(".hover-text").attr("font-size", hover_text_zoom_size(d3.event.transform.k));
-    // d3.selectAll(".hover-text").attr("transform", "scale("+hover_text_zoom_size(d3.event.transform.k) + " " + hover_text_zoom_size(d3.event.transform.k) + ")");
     g.attr("transform", d3.event.transform); // updated for d3 v4
-    // console.log(d3.event.transform.k)
+
     // Update global radius
     current_node_radius = radius_zoom_size(d3.event.transform.k);
 
