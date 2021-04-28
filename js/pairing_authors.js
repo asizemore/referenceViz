@@ -8,6 +8,8 @@ const EDGETHRESH = 4; // Number of shared references required for an edge to exi
 const NODESTHRESH = 200; // Max number of nodes allowed for drawing edges
 const NODERADIUS = 0.7;
 
+let current_node_radius  = NODERADIUS;
+
 // Extract relevant information from html elements
 const svg = d3.select("svg"),
     width = +svg.attr("width"),
@@ -16,21 +18,24 @@ const svg = d3.select("svg"),
 
 // Set up zoom
 let zoom = d3.zoom()
-    .scaleExtent([1, 20])
+    .scaleExtent([1, 10])
     .on("zoom", zoomed);
 
-    var g = svg.append("g");
+let g = svg.append("g");
 
 
 svg.call(zoom);
 
 // Prepare additional variables
 let isClicked = false;  // Boolean to help us update UI based on clicks
+let filterWords = ["Ries"];  // Author input
 
 
 // Prepare divInfo
 let divInfo = d3.select("#info-div");
 divInfo.attr("opacity",0);
+
+let zoomTrans = {x:0, y:0, scale:1}
 
 
 // Read in data and create visualization
@@ -66,13 +71,14 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
 
     // Executed when a user clicks a node
+    // ANN LOOK AT THE BOUNCE
     function onclick(d) {
 
         // Update boolean
         isClicked = true;
     
         // Modify node listeners
-        d3.selectAll(".nodes").attr("r",NODERADIUS).attr("fill", "#5E3B66");
+        d3.selectAll(".nodes").attr("r",current_node_radius);
         d3.selectAll(".nodes").on("mouseout", mouseout);
         d3.select(this).on("mouseout", null);
         d3.selectAll(".nodes").on("mouseover", mouseover);
@@ -80,8 +86,8 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
     
         // Alter state of selected node
         let selectedNode = d3.select(this);
-        selectedNode.attr("fill","#D1BE8E");
-        selectedNode.transition().duration(150).attr("r", 2*NODERADIUS);
+        // selectedNode.attr("r","#D1BE8E");
+        selectedNode.transition().duration(150).attr("r", 2*current_node_radius);
 
         // Retreive node data
         let selectedNodeData = Object.entries(selectedNode.data()[0])
@@ -115,21 +121,74 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         divInfo.attr("opacity",1);
     } // end onClick
 
+
+    // Buttons
+    d3.select("#author-submit1").on("click", function() {
+        console.log("submitted button")
+        // Retrieve input
+        let author_input = document.getElementById('author-input1').value;
+        console.log(author_input);
+        console.log(nodes)
+        filterWords = [author_input];
+
+        let author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
+        console.log(author1)
+
+        author1.attr("fill", "red").attr("class","author");
+
+        // Handle mouse events
+        d3.selectAll(".nodes").on("mouseout",mouseout);
+        author1.on("mouseout", null);
+        author1.on("mouseout",author1Mouseout);
+        
+    })
+
+    d3.select("#author-submit2").on("click", function() {
+        console.log("submitted 2 button")
+        // Retrieve input
+        let author_input = document.getElementById('author-input2').value;
+        console.log(author_input);
+        console.log(nodes)
+        filterWords = [author_input];
+
+        let author2 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
+        console.log(author2)
+
+        author2.attr("fill", "green")
+            .attr("class","author");
+
+        // Handle mouse events
+        d3.selectAll(".nodes").on("mouseout",mouseout);
+        author2.on("mouseout", null);
+        author2.on("mouseout",author1Mouseout);
+        
+    })
+
 }); // end d3.csv
 
 
 
 // Additional helper functions
+function author1Mouseout(d) {
+    let selectedNode = d3.select(this);
+    selectedNode.attr("fill","red");
+}
 
 // Handle mousover actions
 let highlightedKeyword;
 
 function mouseover(d) {
 
+    
     // Extract object info
     let selectedNode = d3.select(this);
-    selectedNode.attr("fill","#D1BE8E");
+    selectedNode.attr("r",1.5*current_node_radius);
     
+    // let x = (d3.mouse(this)[0]- zoomTrans.x)/zoomTrans.scale;
+    let x = (selectedNode.attr("cx") - zoomTrans.x);
+    console.log(x)
+    let y = (d3.mouse(this)[1]- zoomTrans.y)/zoomTrans.scale;
+
     let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
 
     // Clear hover text
@@ -137,20 +196,14 @@ function mouseover(d) {
 
     // Show keyword (hover-text)
     svg.append("text")
-        .attr("x", 15)
-        .attr("y", 16)
+        .attr("x", selectedNode.attr("cx"))
+        .attr("y", selectedNode.attr("cy"))
         .attr("fill", "white")
+        .attr("font-size", 0.5)
         .attr("class","hover-text")
         .attr("text-anchor","start")
         .text(hoveredKeyword);
 
-    // Add fancy line
-    svg.append("line")
-        .attr("x1", 15)
-        .attr("x2", 200)
-        .attr("y1", 22)
-        .attr("y2", 22)
-        .attr("class", "hover-underline");
 
 } // end mouseover
 
@@ -159,8 +212,8 @@ function mouseout(d) {
 
     // Extract data
     let selectedNode = d3.select(this);
-    selectedNode.attr("fill", "#5E3B66");
-    selectedNode.attr("r", NODERADIUS)
+    // selectedNode.attr("fill", "#5E3B66");
+    selectedNode.attr("r", current_node_radius)
 
     // Remove hover text
     d3.selectAll(".hover-text").remove();
@@ -177,12 +230,23 @@ function get_filenames(str) {
     return filteredFiles;
 }
 
-const radius_zoom_size = d3.scaleLinear().domain([1, 20]).range([3, 5]);
-
+const radius_zoom_size = d3.scaleLinear().domain([1, 20]).range([NODERADIUS, 0.2]);
+const hover_text_zoom_size = d3.scaleLinear().domain([1, 20]).range([10, 0.00001]); 
 // Zoom
 function zoomed() {
-    // d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
+
+    zoomTrans.x = d3.event.transform.x;
+    zoomTrans.y = d3.event.transform.y;
+    zoomTrans.scale = d3.event.transform.k;
+    console.log(d3.event.transform.k)
+
+    d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
+    // d3.selectAll(".hover-text").attr("font-size", hover_text_zoom_size(d3.event.transform.k));
+    // d3.selectAll(".hover-text").attr("transform", "scale("+hover_text_zoom_size(d3.event.transform.k) + " " + hover_text_zoom_size(d3.event.transform.k) + ")");
     g.attr("transform", d3.event.transform); // updated for d3 v4
+    // console.log(d3.event.transform.k)
+    // Update global radius
+    current_node_radius = radius_zoom_size(d3.event.transform.k);
 }
   
 // If the drag behavior prevents the default click,

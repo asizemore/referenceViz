@@ -20,6 +20,16 @@ let simulation = d3.forceSimulation()
 let filterWords = ["Ries"];  // Author input
 let isClicked = false;  // Boolean to help us update UI based on clicks
 
+// Set up zoom
+let zoom = d3.zoom()
+    .scaleExtent([1, 20])
+    .on("zoom", zoomed);
+
+    var g = svg.append("g");
+
+
+svg.call(zoom);
+
 
  // Update title
  let divTitle = d3.select("#title-div");
@@ -61,14 +71,14 @@ d3.csv("../data/all_keywords.csv", function(error, csv_nodes) {
         // Create links and draw them if drawEdges===true
         let link;
         if(drawEdges){
-            link = svg.append("g")
+            link = g.append("g")
                 .attr("class", "links")
                 .selectAll("line")
                 .data(show_edges)
                 .enter().append("line")
                 .attr("opacity", function(d) {return edge_scale(d.files.split("'").length)});
         } else {
-            link = svg.append("g")
+            link = g.append("g")
                 .attr("class", "links")
                 .selectAll("line")
                 .data(show_edges);
@@ -76,7 +86,7 @@ d3.csv("../data/all_keywords.csv", function(error, csv_nodes) {
 
 
         // Draw nodes
-        let node = svg.append("g")
+        let node = g.append("g")
             .selectAll("circle")
             .data(show_nodes)
             .enter().append("circle")
@@ -184,8 +194,8 @@ d3.csv("../data/all_keywords.csv", function(error, csv_nodes) {
             filterWords = [keyword_input];
 
             // Update svg
-            svg.selectAll(".nodes").remove();
-            svg.selectAll(".links").remove();
+            g.selectAll(".nodes").remove();
+            g.selectAll(".links").remove();
             d3.selectAll(".hover-text").remove();
             d3.selectAll(".hover-underline").remove();
             divInfo.text(null);
@@ -293,6 +303,19 @@ input.addEventListener("keyup", function(event) {
    document.getElementById("keyword-submit").click();
   }
 });
+
+
+// Zoom
+function zoomed() {
+    // d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
+    g.attr("transform", d3.event.transform); // updated for d3 v4
+}
+  
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
 
 // // Return the node degree
 // function get_n_links(d) {
