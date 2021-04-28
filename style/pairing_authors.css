@@ -87,6 +87,7 @@ background-color:#5E3B66;
 #svg-div {
     display: inline-block;
     margin: auto;
+    position: relative;
 }
 
 #info-div-container {

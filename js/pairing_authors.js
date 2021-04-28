@@ -217,9 +217,19 @@ function mouseover(d) {
     selectedNode.attr("r",1.5*current_node_radius);
     
     // let x = (d3.mouse(this)[0]- zoomTrans.x)/zoomTrans.scale;
-    let x = (d3.mouse(this)[0] - zoomTrans.x)/zoomTrans.scale;
+    // let x = (d3.mouse(this)[0] - zoomTrans.x)/zoomTrans.scale;
+    let x = selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x
     console.log(d3.event.x)
-    let y = (d3.mouse(this)[1]- zoomTrans.y)/zoomTrans.scale;
+    // let y = (d3.mouse(this)[1]- zoomTrans.y)/zoomTrans.scale;
+    let y = selectedNode.attr("cy")*zoomTrans.scale + zoomTrans.y
+    // console.log(d3.event.pageX)
+
+    var xy = d3.mouse(this);
+  
+    var transform = d3.zoomTransform(svg);
+    var xy1 = transform.invert(xy);
+    console.log(selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x)
+    console.log(zoomTrans);
 
     let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
 
@@ -228,10 +238,9 @@ function mouseover(d) {
 
     // Show keyword (hover-text)
     svg.append("text")
-        .attr("x", d3.event.x +3)
-        .attr("y", d3.mouse(this)[1] - 3)
+        .attr("x", x)
+        .attr("y", y)
         .attr("fill", "white")
-        .attr("font-size", 0.5)
         .attr("class","hover-text")
         .attr("text-anchor","start")
         .text(hoveredKeyword);
@@ -263,14 +272,14 @@ function get_filenames(str) {
 }
 
 const radius_zoom_size = d3.scaleLinear().domain([1, 20]).range([NODERADIUS, 0.2]);
-const hover_text_zoom_size = d3.scaleLinear().domain([1, 20]).range([10, 0.00001]); 
+const hover_text_zoom_size = d3.scaleSqrt().domain([1, 10]).range([10, 0.0000000001]); 
 // Zoom
 function zoomed() {
 
     zoomTrans.x = d3.event.transform.x;
     zoomTrans.y = d3.event.transform.y;
     zoomTrans.scale = d3.event.transform.k;
-    console.log(d3.event.transform.k)
+
 
     d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
     // d3.selectAll(".hover-text").attr("font-size", hover_text_zoom_size(d3.event.transform.k));
@@ -279,6 +288,7 @@ function zoomed() {
     // console.log(d3.event.transform.k)
     // Update global radius
     current_node_radius = radius_zoom_size(d3.event.transform.k);
+
 }
   
 // If the drag behavior prevents the default click,
