@@ -217,8 +217,8 @@ function mouseover(d) {
     selectedNode.attr("r",1.5*current_node_radius);
     
     // let x = (d3.mouse(this)[0]- zoomTrans.x)/zoomTrans.scale;
-    let x = (selectedNode.attr("cx") - zoomTrans.x);
-    console.log(x)
+    let x = (d3.mouse(this)[0] - zoomTrans.x)/zoomTrans.scale;
+    console.log(d3.event.x)
     let y = (d3.mouse(this)[1]- zoomTrans.y)/zoomTrans.scale;
 
     let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
@@ -228,8 +228,8 @@ function mouseover(d) {
 
     // Show keyword (hover-text)
     svg.append("text")
-        .attr("x", selectedNode.attr("cx"))
-        .attr("y", selectedNode.attr("cy"))
+        .attr("x", d3.event.x +3)
+        .attr("y", d3.mouse(this)[1] - 3)
         .attr("fill", "white")
         .attr("font-size", 0.5)
         .attr("class","hover-text")
