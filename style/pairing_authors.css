@@ -43,10 +43,6 @@ a {
 }
 
 a:hover {
-    color: #B6A4BA;
-}
-
-#reference-link:hover {
     color: #9DC7B8;
 }
 
@@ -57,7 +53,7 @@ input {
 
 
 button {
-background-color: #0B0D0C;
+background-color: #180F1A;
 border:0.1em solid white;
 padding:0.15em 1.2em;
 /* margin:0 0.1em 0.1em 0; */
@@ -74,7 +70,7 @@ display: inline;
 
 button:hover {
 color:white;
-background-color:#3C7861;
+background-color:#5E3B66;
 
 }
 
@@ -91,6 +87,7 @@ background-color:#3C7861;
 #svg-div {
     display: inline-block;
     margin: auto;
+    position: relative;
 }
 
 #info-div-container {
@@ -138,15 +135,24 @@ background-color:#3C7861;
 }
 
 
-.links {
-    stroke: #ABC9BE;
-    stroke-width: 1px;
-}
 
 .nodes {
-    fill: #3C7861;
+    fill: #5E3B66;
     stroke: #D1BE8E;
 }
+
+.author1 {
+    fill: #529FCE;
+}
+
+.author2 {
+    fill: #D1BE8E;
+}
+
+.author12 {
+    fill: #74B8A0;
+}
+
 
 
 
@@ -155,23 +161,27 @@ background-color:#3C7861;
 }
 
 
-#author-input-div {
-    float: left;
-    width: 100%;
-    font-size: 36px;
-    vertical-align: middle;
-
-}
-
 .hover-text {
     color: #D1BE8E;
     font-style: italic;
-    font-size: 20px;
+    font-size: 24px;
 }
 
 .hover-underline {
     stroke: #D1BE8E;
     stroke-width: 0.5px;
+}
+
+.author1-info {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #529FCE;
+}
+
+.author2-info {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #D1BE8E;
 }
 
 
@@ -182,15 +192,15 @@ width: 10px;
 
 /* Track */
 ::-webkit-scrollbar-track {
-background: #0B0D0C; 
+background: #180F1A; 
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-background: #3C7861; 
+background: rgb(137, 124, 139); 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-background: rgb(90, 156, 131); 
+background: #B6A4BA; 
 }

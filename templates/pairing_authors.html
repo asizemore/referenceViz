@@ -2,12 +2,23 @@
 <meta charset="utf-8">
 
 <head>
-    <link rel="stylesheet" href="../style/keyword_space_umap.css">
+    <link rel="stylesheet" href="../style/pairing_authors.css">
 </head>
 
 <body style="background-color:#180F1A">
     <div id="title-div">
         <h1>Projection of keywords based on reference mentions</h1>
+    </div>
+
+    <div id="author-input1-div" style="padding-bottom: 20px">
+        <h3>Enter the first author</h3>
+        <input type="text" id="author-input1" name="name" minlength="4" maxlength="20" size="10" placeholder="Author">
+    </div>
+
+    <div id="author-input2-div" style="padding-bottom: 20px">
+        <h3>Enter the second author</h3>
+        <input type="text" id="author-input2" name="name" minlength="4" maxlength="20" size="10" placeholder="Author">
+        <button id="author-submit">Submit</button>
     </div>
 
     <div id="content-div">
@@ -38,7 +49,7 @@
     <script src="https://d3js.org/d3-color.v1.min.js"></script>
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <script src="../js/keyword_space_umap.js"></script>
+    <script src="../js/pairing_authors.js"></script>
 
 
 

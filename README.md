@@ -1,10 +1,10 @@
 # Visualization of bibilography database
 
-*04.22.21*
-
-## How to create these visualizations
+*Last updated 04.22.21*
 
 <br>
+
+## How to create these visualizations
 
 ### *Step 0: Setting up the container*
 
@@ -18,9 +18,13 @@ To get started, download [Docker](https://www.docker.com/products/docker-desktop
 
 The included jupyter notebooks produce .csv files which the visualizations will consume. Each notebook reads in raw data from the `raw_data` folder, and will write their csv files to the `data` folder.
 
+<br>
+
 ### *Step 2: Start python simple server*
 
 An easy way to run the visualization locally is through python's simple server. Navigate to this project's directory and run `python -m SimpleHTTPServer 9100` in the terminal. Navigate to `http://127.0.0.1:9100/` (or equivalent).
+
+<br>
 
 ### *Step 3: View the visualization*
 
