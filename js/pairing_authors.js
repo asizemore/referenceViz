@@ -11,7 +11,6 @@ const NODERADIUS = 0.7;
 let current_node_radius  = NODERADIUS;
 let author1_input = null;
 let author2_input = null;
-let author12;
 
 // Extract relevant information from html elements
 const svg = d3.select("svg"),
@@ -127,56 +126,8 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
 
     // Buttons
-    d3.select("#author-submit1").on("click", function() {
 
-        let author1 = [];
-        d3.selectAll(".author1").attr("class","nodes");
-
-        // Clear info
-        d3.selectAll(".author1-info").remove();
-
-        // Retrieve input
-        author1_input = document.getElementById('author-input1').value;
-
-        if (author1_input.length>1) {
-            filterWords = [author1_input];
-    
-            author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
-            author1.attr("class","author1");
-
-    
-            if(author2_input) {
-                author12 = [];
-                filterWords.push(author2_input);
-                author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
-    
-                author12.attr("class","author12");
-            }
-            
-            // Handle mouse events
-            node.on("mouseout",mouseout);
-            author1.on("mouseout", null);
-            author1.on("mouseout",authorMouseout);
-
-            // Add author text
-            svg.append('text')
-                .text(author1_input)
-                .attr("class", "author1-info")
-                .attr("x", 5)
-                .attr("fill", "#529FCE")
-                .attr("y", 20)
-                .attr("text-anchor","start")
-
-        } else {
-            // Treat as clear
-            author1.attr("class", "nodes");
-            author12.attr("class","author2");
-            node.on("mouseout",mouseout);
-        }
-        
-    })
-
-    d3.select("#author-submit2").on("click", function() {
+    d3.select("#author-submit").on("click", function() {
 
         // Refresh
         node.attr("class", "nodes");
@@ -189,7 +140,6 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
             author2 = [],
             author12 = [];
 
-
         // Clear info
         d3.selectAll(".author1-info").remove();
         d3.selectAll(".author2-info").remove();
@@ -199,10 +149,10 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         author2_input = document.getElementById('author-input2').value;
 
         if (author1_input.length>1) {
+
+            // Subset nodes
             filterWords = [author1_input];
-    
             author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
-    
             author1.attr("class","author1");
 
             // Handle mouse events
@@ -222,10 +172,10 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         } // End if author1_input
 
         if (author2_input.length>1) {
+
+            // Subset nodes
             filterWords = [author2_input];
-    
             author2 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
-    
             author2.attr("class","author2");
             
             // Handle mouse events
@@ -246,13 +196,15 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
         if (author1_input.length>1 && author2_input.length>1) {
 
+            // Subset nodes
             filterWords = [author1_input, author2_input];
             author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
 
+            // Set class
             author12.attr("class","author12");
         }
         
-    })
+    }) // end author-submit button function
 
 }); // end d3.csv
 
@@ -273,15 +225,14 @@ let highlightedKeyword;
 
 function mouseover(d) {
 
-    
     // Extract object info
     let selectedNode = d3.select(this);
     selectedNode.attr("r",1.5*current_node_radius);
+    let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
     
+    // Calculate where the text should reside
     let x = selectedNode.attr("cx")*zoomTrans.scale + zoomTrans.x + 5;
     let y = selectedNode.attr("cy")*zoomTrans.scale + zoomTrans.y - 5;
-
-    let hoveredKeyword = Object.entries(selectedNode.data()[0])[1][1];
 
     // Clear hover text
     d3.selectAll(".hover-text").remove();
@@ -321,14 +272,13 @@ function get_filenames(str) {
 }
 
 const radius_zoom_size = d3.scaleLinear().domain([1, 20]).range([NODERADIUS, 0.2]);
-const hover_text_zoom_size = d3.scaleSqrt().domain([1, 10]).range([10, 0.0000000001]); 
+
 // Zoom
 function zoomed() {
 
     zoomTrans.x = d3.event.transform.x;
     zoomTrans.y = d3.event.transform.y;
     zoomTrans.scale = d3.event.transform.k;
-
 
     d3.selectAll(".nodes").attr("r", radius_zoom_size(d3.event.transform.k));
     g.attr("transform", d3.event.transform); // updated for d3 v4
