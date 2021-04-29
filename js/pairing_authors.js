@@ -82,6 +82,7 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
     
         // Modify node listeners
         d3.selectAll(".nodes").attr("r",current_node_radius);
+        node.attr("r",current_node_radius);
         d3.selectAll(".nodes").on("mouseout", mouseout);
         d3.select(this).on("mouseout", null);
         d3.selectAll(".nodes").on("mouseover", mouseover);
@@ -128,6 +129,9 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
     // Buttons
     d3.select("#author-submit1").on("click", function() {
 
+        let author1 = [];
+        d3.selectAll(".author1").attr("class","nodes");
+
         // Clear info
         d3.selectAll(".author1-info").remove();
 
@@ -137,12 +141,12 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
         if (author1_input.length>1) {
             filterWords = [author1_input];
     
-            let author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
-    
+            author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
             author1.attr("class","author1");
 
     
             if(author2_input) {
+                author12 = [];
                 filterWords.push(author2_input);
                 author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
     
@@ -165,7 +169,8 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
         } else {
             // Treat as clear
-            node.attr("class", "nodes");
+            author1.attr("class", "nodes");
+            author12.attr("class","author2");
             node.on("mouseout",mouseout);
         }
         
@@ -173,25 +178,55 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
 
     d3.select("#author-submit2").on("click", function() {
 
-         // Clear info
-         d3.selectAll(".author2-info").remove();
+        // Refresh
+        node.attr("class", "nodes");
+        d3.selectAll(".author1").attr("class", "nodes");
+        d3.selectAll(".author2").attr("class", "nodes");
+        d3.selectAll(".author12").attr("class", "nodes");
+        node.on("mouseout",mouseout);
+
+        let author1 = [],
+            author2 = [],
+            author12 = [];
+
+
+        // Clear info
+        d3.selectAll(".author1-info").remove();
+        d3.selectAll(".author2-info").remove();
 
         // Retrieve input
+        author1_input = document.getElementById('author-input1').value;
         author2_input = document.getElementById('author-input2').value;
+
+        if (author1_input.length>1) {
+            filterWords = [author1_input];
+    
+            author1 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
+    
+            author1.attr("class","author1");
+
+            // Handle mouse events
+            node.on("mouseout",mouseout);
+            author1.on("mouseout", null);
+            author1.on("mouseout",authorMouseout);
+
+            // Add author text
+            svg.append('text')
+                .text(author1_input)
+                .attr("class", "author1-info")
+                .attr("x", 5)
+                .attr("fill", "#529FCE")
+                .attr("y", 20)
+                .attr("text-anchor","start")
+
+        } // End if author1_input
 
         if (author2_input.length>1) {
             filterWords = [author2_input];
     
-            let author2 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
+            author2 = node.filter(d => filterWords.some(r => d.authors.includes(r)));
     
             author2.attr("class","author2");
-    
-            if(author1_input) {
-                filterWords.push(author1_input);
-                author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
-    
-                author12.attr("class","author12");
-            }
             
             // Handle mouse events
             node.on("mouseout",mouseout);
@@ -207,10 +242,14 @@ d3.csv("../data/all_keywords_umap.csv", function(error, nodes) {
                 .attr("y", 50)
                 .attr("text-anchor","start")
 
-        } else {
-            // Treat as clear
-            node.attr("class", "nodes");
-            node.on("mouseout",mouseout);
+        } // End if author2_input
+
+        if (author1_input.length>1 && author2_input.length>1) {
+
+            filterWords = [author1_input, author2_input];
+            author12 = node.filter(d => filterWords.every(r => d.authors.includes(r)));
+
+            author12.attr("class","author12");
         }
         
     })
