@@ -294,6 +294,24 @@ function stopped() {
 if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
 
+// Have submit listen to "enter"
+const input1 = document.getElementById("author-input1");
+input1.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("author-submit").click();
+  }
+});
+
+const input2 = document.getElementById("author-input2");
+input2.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("author-submit").click();
+  }
+});
+
+
 
 
 
